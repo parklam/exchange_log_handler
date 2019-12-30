@@ -25,11 +25,15 @@ setuptools.setup(
     #packages=setuptools.find_packages(),
     packages=['exchange_log_handler'],
     include_package_data=True,
+    license='Apache License 2.0',
     zip_safe=False,
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
+    ],
+    install_requires=[
+        'exchangelib==2.1.1',
     ],
     keywords='log handler exchange',
 )
