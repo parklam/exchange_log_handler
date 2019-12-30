@@ -7,14 +7,14 @@ Author: Park Lam <lqmonline@gmail.com>
 import json
 from exchangelib import DELEGATE, Account, Credentials, Configuration, Mailbox, \
         Message
-from logging import Handler, Formatter
+from logging import Handler
 
 class ExchangeHandler(Handler):
     """
     A handler class which send logging records as email via ExChange server.
     """
     def __init__(self, credentials, toaddrs, fromaddr=None, \
-            subject=None, timeout=5.0, \
+            subject=None, access_type=DELEGATE, \
             ews_url='https://outlook.office365.com/ews/exchange.asmx'):
         """
         Initialize the handler
@@ -39,14 +39,19 @@ class ExchangeHandler(Handler):
             self._toaddrs = [ i.strip() for i in toaddrs.replace(';', ',') \
                     .strip(',').split(',') ]
         self._subject = subject
-        self._timeout = timeout
+        self._access_type = access_type
 
     def get_account(self):
         return Account(primary_smtp_address=self._fromaddr, \
-                config=self._config, autodiscover=False, access_type=DELEGATE)
+                config=self._config, autodiscover=False, \
+                access_type=self._access_type)
 
     def get_subject(self, record):
-        return self._subject
+        if callable(self._subject):
+            return self._subject(record)
+        elif isinstance(self._subject, str):
+            return self._subject
+        return self._subject or 'No subject'
 
     def get_content(self, record):
         return self.format(record)

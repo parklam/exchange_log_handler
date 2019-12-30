@@ -16,12 +16,11 @@ init-venv:
 .PHONY: clean
 clean:
 	@echo "Start clean..."
-	rm -rf build dist VERSION.txt
+	rm -rf build dist
 	find . -name '__pycache__' -type d |xargs rm -rf
 	find . -name '*.egg-info' -type d |xargs rm -rf
 	find . -name '*.egg-info' -type f -delete
 	find . -name '*~' -type f -delete
-	find ./pychromedriver -name 'chromedriver_*' -type f -delete
 	@echo "Finish clean"
 
 .PHONY: build
@@ -35,7 +34,7 @@ build: init-venv
 .PHONY: upload-test
 upload-test: clean build
 	@echo "Start upload-test..."
-	@test -f VERSION.txt \
+	@test -f VERSION \
 		&& . ${VENV}/bin/activate \
 		&& python -m twine upload \
 			-u ${PYPI_USER} \
@@ -48,7 +47,7 @@ upload-test: clean build
 .PHONY: upload-pypi
 upload-pypi: clean build
 	@echo "Start upload-pypi..."
-	@test -f VERSION.txt \
+	@test -f VERSION \
 		&& . ${VENV}/bin/activate \
 		&& python -m twine upload \
 			-u ${PYPI_USER} \
