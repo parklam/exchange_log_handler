@@ -5,6 +5,7 @@ Author: Park Lam <lqmonline@gmail.com>
 '''
 
 import json
+import re
 from exchangelib import DELEGATE, Account, Credentials, Configuration, Mailbox, \
         Message
 from logging import Handler
@@ -38,6 +39,11 @@ class ExchangeHandler(Handler):
         if isinstance(toaddrs, str):
             self._toaddrs = [ i.strip() for i in toaddrs.replace(';', ',') \
                     .strip(',').split(',') ]
+        elif isinstance(toaddrs, (list, tuple)):
+            self._toaddrs = toaddrs
+        for toaddr in toaddrs:
+            assert re.match(r"^\S+@\S+\.\S+$", toaddr, re.M|re.I), \
+                    'invalid_email'
         self._subject = subject
         self._access_type = access_type
 

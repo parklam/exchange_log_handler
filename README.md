@@ -6,7 +6,7 @@ This library used [ecederstrand/exchangelib](https://github.com/ecederstrand/exc
 
 ## How to install:
 `
-pip install exchange_log_handler
+pip install exchange-log-handler
 `
 ## Usage:
 ```
